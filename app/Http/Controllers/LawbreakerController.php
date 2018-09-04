@@ -45,8 +45,14 @@ class LawbreakerController extends Controller
         $lawbreaker->loc_lat=$request->lat;
         $lawbreaker->loc_long=$request->lng;
         $lawbreaker->save();
-        return view('home');
-        //return redirect()->back();
+//        $this->showOrders();
     }
+
+    public function showOrders()
+    {
+        return view('lawbreaker.showOrders');
+    }
+
+
 
 }

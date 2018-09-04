@@ -27,7 +27,9 @@ Route::GET('lawbreaker-password/reset','Lawbreaker\ForgotPasswordController@show
 Route::POST('password/reset','Lawbreaker\ResetPasswordController@reset');
 Route::GET('password/reset/{token}','Lawbreaker\ResetPasswordController@showResetForm')->name('lawbreaker.password.reset');
 Route::GET('lawbreaker/home/change-status','LawbreakerController@changeStatus')->name('lawbreaker.changeStatus');
-Route::POST('/lawbreaker/home/get-location','LawbreakerController@getLocation')->name('lawbreaker.getLocation');
+Route::POST('lawbreaker/home/get-location','LawbreakerController@getLocation')->name('lawbreaker.getLocation');
+Route::GET('lawbreaker/home/show-orders','LawbreakerController@showOrders')->name('lawbreaker.showOrders');
+
 
 Route::GET('manager/home','ManagerController@index');
 Route::GET('manager','Manager\LoginController@showLoginForm')->name('manager.login');

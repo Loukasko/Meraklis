@@ -25,21 +25,24 @@
                                 @endif
                             </div>
                             <div class="col-sm">
-                                <form action="POST" id="getLocation">
-                                    <button type="button" id="btn_success" class="btn btn-success btn-sm">Επιλογή τοποθεσίας</button>
-                                </form>
+                                <a href="{{ url('lawbreaker/home') }}" class="btn-sm btn-success"
+                                   aria-pressed="false" id="btn-sample">Αλλαγή τοποθεσίας</a>
+
+                                {{--<form action="POST" id="getLocation">--}}
+                                    {{--<button type="button" id="btn_success" class="btn btn-success btn-sm">Επιλογή τοποθεσίας</button>--}}
+                                {{--</form>--}}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
-                <div id="map" style="height:500px"></div>
-                <ul id="geoData">
-                    <li>Full Address: <span id="location"></span></li>
-                    <li>Latitude: <span id="lat"></span></li>
-                    <li>Longitude: <span id="lng"></span></li>
-                </ul>
+                {{--<input id="searchInput" class="controls" type="text" placeholder="Enter a location">--}}
+                {{--<div id="map" style="height:500px"></div>--}}
+                {{--<ul id="geoData">--}}
+                    {{--<li>Full Address: <span id="location"></span></li>--}}
+                    {{--<li>Latitude: <span id="lat"></span></li>--}}
+                    {{--<li>Longitude: <span id="lng"></span></li>--}}
+                {{--</ul>--}}
             </div>
         </div>
     </div>
@@ -96,8 +99,6 @@
                             var lng = point.lng();
                             $.post('home/get-location',{'address':address,'lat': lat,'lng':lng,'_token':$('input[name=_token]').val()},function(data){
                                 console.log(data);
-                                window.location.assign('home/show-orders');
-
                             });
                         })
                     }
@@ -154,15 +155,14 @@
                     var lng = place.geometry.location.lng();
                     $.post('home/get-location',{'address':address,'lat': lat,'lng':lng,'_token':$('input[name=_token]').val()},function(data){
                         console.log(data);
-                        window.location.assign('home/show-orders');
                     });
-
+                    // window.location = "order";
                 });
+
 
             });
 
         }
-
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNvM3cspDODEWniOMkvT4qMxSK4SvZ4-A&libraries=places&callback=initMap" async defer></script>
