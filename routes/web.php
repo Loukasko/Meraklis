@@ -41,5 +41,42 @@ Route::GET('password/reset/{token}','Manager\ResetPasswordController@showResetFo
 
 
 
+//takes id as param
+Route::get('/add-to-cart/{id}',[
+    'uses' => 'productsController@getAddToCart',
+    'as' => 'shop.addToCart'
+]);
+
+Route::get('/shopping-cart',[
+    'uses' => 'productsController@getCart',
+    'as' => 'shop.shopping-cart'
+
+]);
+
+
+
+//Route::get('/checkout', [
+//    'uses' => 'productsController@getCheckout',
+//    'as' => 'shop.checkout'
+//]);
+
+Route::post('/checkout', [
+    'uses' => 'productsController@getCheckout',
+    'as' => 'shop.checkout'
+]);
+
+//Route::post('/checkout', function(){
+//    if(Request::ajax()){
+//        return var_dump(Response::json(Request::all()));
+//    }
+//});
+
+
+//This way all the request at order will be redirected at the productsController
+Route::get('order', [
+    'uses' => 'productsController@getIndex',
+    'as' => 'shop.index',
+//    'middleware' => 'auth'
+]);
 
 
