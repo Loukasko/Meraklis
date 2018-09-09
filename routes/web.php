@@ -29,6 +29,8 @@ Route::GET('password/reset/{token}','Lawbreaker\ResetPasswordController@showRese
 Route::GET('lawbreaker/home/change-status','LawbreakerController@changeStatus')->name('lawbreaker.changeStatus');
 Route::POST('lawbreaker/home/get-location','LawbreakerController@getLocation')->name('lawbreaker.getLocation');
 Route::GET('lawbreaker/home/show-orders','LawbreakerController@showOrders')->name('lawbreaker.showOrders');
+Route::GET('lawbreaker/home/fetch-order','LawbreakerController@fetchOrder')->name('lawbreaker.fetchOrders');
+Route::GET('lawbreaker/home/delivered/{order_id}','LawbreakerController@delivered')->name('lawbreaker.delivered');
 
 
 Route::GET('manager/home','ManagerController@index');

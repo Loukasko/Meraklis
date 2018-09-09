@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Lawbreaker;
 use Illuminate\Http\Request;
+use App\Order;
+use App\Store;
 
 class LawbreakerController extends Controller
 {
@@ -45,14 +47,42 @@ class LawbreakerController extends Controller
         $lawbreaker->loc_lat=$request->lat;
         $lawbreaker->loc_long=$request->lng;
         $lawbreaker->save();
-//        $this->showOrders();
     }
 
-    public function showOrders()
+    public function showOrders(){
+        $orders=Order::all();
+        $stores=Store::all();
+        $data=array('orders'=>$orders,'stores'=>$stores);
+        return view('lawbreaker.showOrders')->with($data);
+
+    }
+
+    public function fetchOrder(Request $request)
     {
-        return view('lawbreaker.showOrders');
+        $lawbreaker=$request->user('lawbreaker');
+        $max=Order::where('lawbreaker_id',$lawbreaker->id)->max('created_at');
+        $order=Order::where('created_at',$max)->first();
+
+        if($order->status==0){
+            return redirect()->back()->with('msg','Έχετε αναλάβει ήδη κάποια παραγγελία');
+            //return Redirect::back()->withErrors(['msg', 'The Message']);
+        }else{
+            $min=Order::where('lawbreaker_id',NULL)->min('created_at');
+            $order=Order::where('created_at',$min)->first();
+            if(empty($order)){
+                return redirect()->back()->with('msg','Δεν υπάρχει διαθέσιμη παραγγελία');
+            }
+            $order->lawbreaker_id=$lawbreaker->id;
+            $order->save();
+            return redirect()->back();
+        }
     }
 
-
+    public function delivered(Request $request){
+        $order=Order::find($request->order_id);
+        $order->status=1;
+        $order->save();
+        return redirect()->back();
+    }
 
 }
