@@ -31,6 +31,9 @@ Route::POST('lawbreaker/home/get-location','LawbreakerController@getLocation')->
 Route::GET('lawbreaker/home/show-orders','LawbreakerController@showOrders')->name('lawbreaker.showOrders');
 Route::GET('lawbreaker/home/fetch-order','LawbreakerController@fetchOrder')->name('lawbreaker.fetchOrders');
 Route::GET('lawbreaker/home/delivered/{order_id}','LawbreakerController@delivered')->name('lawbreaker.delivered');
+Route::GET('lawbreaker/home/get-distance','LawbreakerController@getDistance')->name('lawbreaker.getDistance');
+Route::GET('lawbreaker/home/get-stats','LawbreakerController@getStats')->name('lawbreaker.getStats');
+
 
 
 Route::GET('manager/home','ManagerController@index');

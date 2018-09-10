@@ -144,7 +144,10 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ url('lawbreaker/home')}}">
-                                        {{__('Αλλαγή τοποθεσίας')}}
+                                        {{__('Αρχική')}}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url('lawbreaker/home/get-stats')}}">
+                                        {{__('Πληροφορίες')}}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

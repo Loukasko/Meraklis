@@ -14,6 +14,9 @@ class LawbreakerController extends Controller
      *
      * @return void
      */
+
+    private $temp;
+
     public function __construct()
     {
         $this->middleware('auth:lawbreaker');
@@ -33,6 +36,9 @@ class LawbreakerController extends Controller
         $lawbreaker=$request->user('lawbreaker');
         if($lawbreaker->status){
             $lawbreaker->status=0;
+            $lawbreaker->km_monthly+=$lawbreaker->km_today;
+            $lawbreaker->ridesToday=0;
+            $lawbreaker->km_today=0;
             $lawbreaker->save();
         }else{
             $lawbreaker->status=1;
@@ -59,30 +65,69 @@ class LawbreakerController extends Controller
 
     public function fetchOrder(Request $request)
     {
-        $lawbreaker=$request->user('lawbreaker');
-        $max=Order::where('lawbreaker_id',$lawbreaker->id)->max('created_at');
-        $order=Order::where('created_at',$max)->first();
+//        $lawbreaker=$request->user('lawbreaker');
+//        $max=Order::where('lawbreaker_id',$lawbreaker->id)->max('created_at');
+//        $min=Order::where('lawbreaker_id',NULL)->min('created_at');
+//
+//        $order=Order::where('created_at',$max)->first();
+//
+//        if($order->status==0){
+//            return redirect()->back()->with('msg','Έχετε αναλάβει ήδη κάποια παραγγελία');
+//            //return Redirect::back()->withErrors(['msg', 'The Message']);
+//        }else if(!empty($min)){
+//            $order=Order::where('created_at',$min)->first();
+//            if(empty($order)){
+//                return redirect()->back()->with('msg','Δεν υπάρχει διαθέσιμη παραγγελία');
+//            }
+//            $order->lawbreaker_id=$lawbreaker->id;
+//            $order->save();
+//            return redirect()->back();
+//        }
 
-        if($order->status==0){
+        $lawbreaker=$request->user('lawbreaker');
+        $max=Order::where('lawbreaker_id',$lawbreaker->id)->where('status','0')->max('created_at');
+        $min=Order::where('lawbreaker_id',NULL)->where('status','0')->min('created_at');
+
+        if(!empty($max)){
             return redirect()->back()->with('msg','Έχετε αναλάβει ήδη κάποια παραγγελία');
-            //return Redirect::back()->withErrors(['msg', 'The Message']);
-        }else{
-            $min=Order::where('lawbreaker_id',NULL)->min('created_at');
+        }if(!empty($min)){
             $order=Order::where('created_at',$min)->first();
-            if(empty($order)){
-                return redirect()->back()->with('msg','Δεν υπάρχει διαθέσιμη παραγγελία');
-            }
             $order->lawbreaker_id=$lawbreaker->id;
             $order->save();
             return redirect()->back();
+        }else{
+            return redirect()->back()->with('msg','Δεν υπάρχει διαθέσιμη παραγγελία');
         }
+
     }
 
     public function delivered(Request $request){
+        $lawbreaker=$request->user('lawbreaker');
         $order=Order::find($request->order_id);
+
+        $lawbreaker->loc_lat=$order->lat;
+        $lawbreaker->loc_long=$order->lng;
+        $lawbreaker->km_today+=$lawbreaker->tempDist;
         $order->status=1;
+        $lawbreaker->ridesToday++;
+
+        $lawbreaker->save();
         $order->save();
+
         return redirect()->back();
+    }
+
+    public function getDistance(Request $request){
+
+        $lawbreaker=$request->user('lawbreaker');
+        $lawbreaker->tempDist=$request->dist/10;
+
+        $lawbreaker->save();
+    }
+
+    public function getStats(Request $request){
+        return view('lawbreaker.stats');
+
     }
 
 }
