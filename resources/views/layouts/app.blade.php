@@ -149,6 +149,9 @@
                                     <a class="dropdown-item" href="{{ url('lawbreaker/home/get-stats')}}">
                                         {{__('Πληροφορίες')}}
                                     </a>
+                                    <a class="dropdown-item" href="{{ url('lawbreaker/home/show-orders')}}">
+                                        {{__('Παραγγελία')}}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

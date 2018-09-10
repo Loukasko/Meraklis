@@ -4,7 +4,7 @@
         <div class="row justify-content-center">
             <div class="col-sm-6">
                 <div class="card text-center">
-                    <div class="card-header">Καλώς την</div>
+                    <div class="card-header">Καλωσήρθατε κ.{{Auth::user('lawbreaker')->name}}</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -35,7 +35,7 @@
 
                 <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
                 <div id="map" style="height:500px"></div>
-                <ul id="geoData">
+                <ul style="display: none" id="geoData">
                     <li>Full Address: <span id="location"></span></li>
                     <li>Latitude: <span id="lat"></span></li>
                     <li>Longitude: <span id="lng"></span></li>

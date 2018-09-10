@@ -15,7 +15,8 @@ class Lawbreaker extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password','lId','name','surname','AFM','AMKA','IBAN','status','loc_long','loc_lat','chainId','km_today','km_monthly','salary','address','tempDist','ridesToday',
+        'username', 'password','lId','name','surname','AFM','AMKA','IBAN','status','loc_long','loc_lat','chainId','km_today','km_monthly',
+        'salary','address','tempDist','ridesToday','avSince','totalTime',
 
     ];
 

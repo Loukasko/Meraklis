@@ -79,7 +79,7 @@
                                     <div id="map" style="height:500px"></div>
                                     <div id="directions-panel"></div>
 
-                                    <div id="dist"></div>
+                                    <div id="dist" style="display: none"></div>
                                         @break
                                 @endif
 
@@ -152,7 +152,7 @@
                         route.legs[i].distance.text=route.legs[i].distance.text.replace(/\D/g,'');
                         dist = dist + Number(route.legs[i].distance.text);
                     }
-                    document.getElementById('dist').innerHTML=dist;
+                    document.getElementById('dist').innerHTML=dist/10;
                     //$.post('home/get-location',{'address':address,'lat': lat,'lng':lng,'_token':$('input[name=_token]').val()},function(data){
                     $.get("get-distance/",{'dist':dist,'_token':$('input[name=_token]').val()},function(){
                         //alert("Data: " + data + "\nStatus: " + status);

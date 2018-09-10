@@ -37,11 +37,16 @@ class LawbreakerController extends Controller
         if($lawbreaker->status){
             $lawbreaker->status=0;
             $lawbreaker->km_monthly+=$lawbreaker->km_today;
-            $lawbreaker->ridesToday=0;
-            $lawbreaker->km_today=0;
+            $lawbreaker->totalTime=$lawbreaker->totalTime + now()->diffInRealMinutes($lawbreaker->avSince);
+            $lawbreaker->avSince=Null;
+
             $lawbreaker->save();
         }else{
+            $lawbreaker->avSince=now();
+            $lawbreaker->ridesToday=0;
+            $lawbreaker->km_today=0;
             $lawbreaker->status=1;
+
             $lawbreaker->save();
         }
         return redirect()->back();
@@ -65,24 +70,6 @@ class LawbreakerController extends Controller
 
     public function fetchOrder(Request $request)
     {
-//        $lawbreaker=$request->user('lawbreaker');
-//        $max=Order::where('lawbreaker_id',$lawbreaker->id)->max('created_at');
-//        $min=Order::where('lawbreaker_id',NULL)->min('created_at');
-//
-//        $order=Order::where('created_at',$max)->first();
-//
-//        if($order->status==0){
-//            return redirect()->back()->with('msg','Έχετε αναλάβει ήδη κάποια παραγγελία');
-//            //return Redirect::back()->withErrors(['msg', 'The Message']);
-//        }else if(!empty($min)){
-//            $order=Order::where('created_at',$min)->first();
-//            if(empty($order)){
-//                return redirect()->back()->with('msg','Δεν υπάρχει διαθέσιμη παραγγελία');
-//            }
-//            $order->lawbreaker_id=$lawbreaker->id;
-//            $order->save();
-//            return redirect()->back();
-//        }
 
         $lawbreaker=$request->user('lawbreaker');
         $max=Order::where('lawbreaker_id',$lawbreaker->id)->where('status','0')->max('created_at');
@@ -126,6 +113,23 @@ class LawbreakerController extends Controller
     }
 
     public function getStats(Request $request){
+        $lawbreaker=$request->user('lawbreaker');
+        $currentTs=now();
+        $salkm=0;
+        //$sub=$currentTs-$lawbreaker->avSince;
+        //echo $sub ;
+        //echo $lawbreaker->avSince;
+        //echo $currentTs;
+        //$saltm=$currentTs->diffInRealMinutes($lawbreaker->avSince);
+        if($lawbreaker->status==1) {
+            $lawbreaker->totalTime = $lawbreaker->totalTime + $currentTs->diffInRealMinutes($lawbreaker->avSince);
+            $salkm=($salkm+$lawbreaker->km_today)*0.1;
+        }
+        $salkm+=($lawbreaker->km_monthly)*0.1;
+
+        $lawbreaker->salary=(($lawbreaker->totalTime)/60)*5+$salkm;
+        $lawbreaker->avSince=now();
+        $lawbreaker->save();
         return view('lawbreaker.stats');
 
     }
