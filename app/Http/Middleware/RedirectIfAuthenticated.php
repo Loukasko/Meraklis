@@ -29,6 +29,11 @@ class RedirectIfAuthenticated
                     return redirect('manager/home');
                 }
                 break;
+            case 'admin':
+                if (Auth::guard($guard)->check()) {
+                    return redirect('admin/home');
+                }
+                break;
             default:
                 if (Auth::guard($guard)->check()) {
                     return redirect('/home');
