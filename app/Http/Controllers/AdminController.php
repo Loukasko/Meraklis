@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Storage;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 
+use App\Store;
 use App\Lawbreaker;
 use App\Manager;
 
@@ -32,7 +32,61 @@ class AdminController extends Controller
         return view('admin.home');
     }
 
-    public function payroll(Request $request){
+    public function getPayroll()
+    {
+        return view('admin.newPayroll');
+    }
+
+    public function getNewStore()
+    {
+        $managers=Manager::all();
+        //$stores=Store::all();
+        //$data=array('orders'=>$orders,'stores'=>$stores);
+        $data=array('managers'=>$managers);
+        return view('admin.newStore')->with($data);
+    }
+
+    public function newStore(){
+        $store=new Store();
+        $store->name=Input::get('storeName');
+        $store->phone=Input::get('storePhone');
+        $store->address=Input::get('storeAddress');
+        $store->loc_lat=Input::get('storeLat');
+        $store->loc_long=Input::get('storeLng');
+        $store->chainId=1;
+
+        if( Input::get('checkChoose')=='on') {
+            $aa= Input::get('chooseManager');
+            $name=strtok($aa," ");
+            $aa=strtok(" ");
+            $surname=strtok($aa," ");
+            $manId=Manager::where('name',$name)->where('surname',$surname);
+            $store->managerId=$manId;
+        }
+
+        else{
+            $manager=new Manager();
+            $manager->username=Input::get('managerUsername');
+            $manager->password=bcrypt(Input::get('managerPassword'));
+            $manager->name=Input::get('managerName');
+            $manager->surname=Input::get('managerLastName');
+            $manager->AFM=Input::get('managerAfm');
+            $manager->AMKA=Input::get('managerAmka');
+            $manager->IBAN=Input::get('managerIban');
+            $manager->created_at=now();
+            $manager->updated_at=now();
+
+            $manager->save();
+            //echo $manager->id;
+            $store->managerId=$manager->id;
+        }
+
+        $store->save();
+        return view('admin.home')->with('msg','Εγινε επιτυχής εκχώρηση Καταστήματος');
+
+    }
+
+    public function payroll(){
         $managers=Manager::all();
         $lawbreakers=Lawbreaker::all();
 
@@ -41,6 +95,8 @@ class AdminController extends Controller
 
         $xml = new \XMLWriter();
         $xml->openMemory();
+
+        //gia na ta deixnei kala se apla arxeia
         $xml->setIndent(true);
         // Start a new document
         $xml->startDocument();

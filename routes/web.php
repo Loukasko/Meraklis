@@ -51,8 +51,10 @@ Route::POST('admin-password/email','Admin\ForgotPasswordController@sendResetLink
 Route::GET('admin-password/reset','Admin\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
 Route::POST('password/reset','Admin\ResetPasswordController@reset');
 Route::GET('password/reset/{token}','Admin\ResetPasswordController@showResetForm')->name('admin.password.reset');
+Route::GET('admin/home/payroll','AdminController@getPayroll');
 Route::POST('admin/home/payroll','AdminController@payroll')->name('admin.payroll');
-
+Route::GET('admin/home/new-store','AdminController@getNewStore');
+Route::POST('admin/home/new-store','AdminController@newStore')->name('admin.newStore');
 
 //takes id as param
 Route::get('/add-to-cart/{id}',[

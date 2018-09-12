@@ -65,7 +65,6 @@ class LawbreakerController extends Controller
         $stores=Store::all();
         $data=array('orders'=>$orders,'stores'=>$stores);
         return view('lawbreaker.showOrders')->with($data);
-
     }
 
     public function fetchOrder(Request $request)
