@@ -55,11 +55,16 @@ class AdminController extends Controller
         $store->loc_long=Input::get('storeLng');
         $store->chainId=1;
 
+        if(!($store->name && $store->phone && $store->address && $store->loc_lat && $store->loc_long)){
+            return redirect()->back()->with('msg','Δεν έχετε συμπληρώσει όλα τα στοιχεία της φόρμας καταχώρηση καταστήματος');
+        }
+
         if( Input::get('checkChoose')=='on') {
             $aa= Input::get('chooseManager');
             $name=strtok($aa," ");
             $aa=strtok(" ");
             $surname=strtok($aa," ");
+            if(!($name && $surname))return redirect()->back()->with('msg','Δεν επιλέξατε υπεύθυνο από τη φόρμα');
             $manId=Manager::where('name',$name)->where('surname',$surname);
             $store->managerId=$manId;
         }
@@ -73,6 +78,9 @@ class AdminController extends Controller
             $manager->AFM=Input::get('managerAfm');
             $manager->AMKA=Input::get('managerAmka');
             $manager->IBAN=Input::get('managerIban');
+            if(!($manager->username && $manager->password && $manager->name && $manager->surname && $manager->AFM && $manager->AMKA && $manager->IBAN)){
+                return redirect()->back()->with('msg','Δεν συμπληρώσει όλα τα στοιχεία της φόρμας καταχώρηση νέου υπεύθυνου');
+            }
             $manager->created_at=now();
             $manager->updated_at=now();
 
@@ -83,6 +91,65 @@ class AdminController extends Controller
 
         $store->save();
         return view('admin.home')->with('msg','Εγινε επιτυχής εκχώρηση Καταστήματος');
+
+    }
+
+    public function getNewManager()
+    {
+        return view('admin.newManager');
+    }
+
+    public function newManager(){
+            $manager=new Manager();
+            $manager->username=Input::get('managerUsername');
+            $manager->password=bcrypt(Input::get('managerPassword'));
+            $manager->name=Input::get('managerName');
+            $manager->surname=Input::get('managerLastName');
+            $manager->AFM=Input::get('managerAfm');
+            $manager->AMKA=Input::get('managerAmka');
+            $manager->IBAN=Input::get('managerIban');
+            if(!($manager->username && $manager->password && $manager->name && $manager->surname && $manager->AFM && $manager->AMKA && $manager->IBAN)){
+                return redirect()->back()->with('msg','Δεν συμπληρώσει όλα τα στοιχεία της φόρμας καταχώρηση νέου υπεύθυνου');
+            }
+            $manager->created_at=now();
+            $manager->updated_at=now();
+
+            $manager->save();
+            //echo $manager->id;
+
+        return view('admin.home')->with('msg','Εγινε επιτυχής εκχώρηση Υπεύθυνου');
+
+    }
+
+    public function getNewLawbreaker()
+    {
+        return view('admin.newLawbreaker');
+    }
+
+    public function newLawbreaker(){
+        $lawbreaker=new Lawbreaker();
+        $lawbreaker->username=Input::get('lawbreakerUsername');
+        $lawbreaker->password=bcrypt(Input::get('lawbreakerPassword'));
+        $lawbreaker->name=Input::get('lawbreakerName');
+        $lawbreaker->surname=Input::get('lawbreakerLastName');
+        $lawbreaker->AFM=Input::get('lawbreakerAfm');
+        $lawbreaker->AMKA=Input::get('lawbreakerAmka');
+        $lawbreaker->IBAN=Input::get('lawbreakerIban');
+        if(!($lawbreaker->username && $lawbreaker->password && $lawbreaker->name && $lawbreaker->surname && $lawbreaker->AFM && $lawbreaker->AMKA && $lawbreaker->IBAN)){
+            return redirect()->back()->with('msg','Δεν συμπληρώσει όλα τα στοιχεία της φόρμας καταχώρηση νέου υπεύθυνου');
+        }
+        $lawbreaker->status=0;
+        $lawbreaker->loc_lat=38.246639;
+        $lawbreaker->loc_long=21.734573;
+        $lawbreaker->chainId=1;
+
+        $lawbreaker->created_at=now();
+        $lawbreaker->updated_at=now();
+
+        $lawbreaker->save();
+        //echo $manager->id;
+
+        return view('admin.home')->with('msg','Εγινε επιτυχής εκχώρηση Παραβάτη');
 
     }
 

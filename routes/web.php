@@ -55,6 +55,10 @@ Route::GET('admin/home/payroll','AdminController@getPayroll');
 Route::POST('admin/home/payroll','AdminController@payroll')->name('admin.payroll');
 Route::GET('admin/home/new-store','AdminController@getNewStore');
 Route::POST('admin/home/new-store','AdminController@newStore')->name('admin.newStore');
+Route::GET('admin/home/new-manager','AdminController@getNewManager');
+Route::POST('admin/home/new-manager','AdminController@newManager')->name('admin.newManager');
+Route::GET('admin/home/new-lawbreaker','AdminController@getNewLawbreaker');
+Route::POST('admin/home/new-lawbreaker','AdminController@newLawbreaker')->name('admin.newLawbreaker');
 
 //takes id as param
 Route::get('/add-to-cart/{id}',[
