@@ -69,7 +69,7 @@ class productsController extends Controller
         $order->address = $request->address;
         $order->lat = $request->lat;
         $order->lng = $request->lng;
-        $order->status = 1;
+        $order->status = 0;
         $order->store_id = 1;
 
         //retrieve user using Auth facade

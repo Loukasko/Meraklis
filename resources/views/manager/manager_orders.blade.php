@@ -78,14 +78,19 @@ console.log("mesa");
     $.get("{{URL::to('manager/manager_orders_ajax')}}", function(){
         console.log("inout");
     }).done(function(data){
-            console.log(data);
+    var s = "1";
         $.each(data,function(index,subcatObj){
-            //$('#subcategory').append('<option value="'+subcatObj.id+'">'+subcatObj.lat+'</option>')
             if(subcatObj.address == "marker"){
                 subcatObj.address = "Customer Chose address by marker";
             }
-
-            document.getElementById("id").innerHTML += "<br><p>Order : "+subcatObj.id+"<br>Address : "+subcatObj.address+"<br>Cart Info : "+subcatObj."</p><br>";
+        console.log(subcatObj.cart.items[0]);
+            document.getElementById("id").innerHTML += "<br><br><p>Order : "+subcatObj.id+"<br>Address : "+subcatObj.address+"</p>";
+            for(var i=1; i < 11; i++){
+                if(typeof subcatObj.cart.items[i] !== 'undefined') {
+                    document.getElementById("id").innerHTML += "<p> Items : "+ subcatObj.cart.items[i].item.title+"</p>";
+                    console.log(subcatObj.cart.items[i]);
+                }
+            }
 
         });
 

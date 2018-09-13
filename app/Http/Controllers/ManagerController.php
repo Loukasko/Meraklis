@@ -53,7 +53,7 @@ class ManagerController extends Controller
 
         for($i = 0; $i < 5; $i++){
             if( $request->input('data')[$i] != NULL ){
-                    $match_these = ['products_id' => $i+6, 'store_id'=>$store];
+                    $match_these = ['products_id' => $i+6, 'store_id' => $store];
                     DB::table('products_store')->where($match_these)->update(array('stock' => $request->input('data')[$i]));
             }
         }
@@ -67,11 +67,13 @@ class ManagerController extends Controller
 
     public function ajax_orders(){
         $store_id = Auth::user('manager')->store->id;
-        $orders = Order::where('store_id', '=',$store_id )->get();
+        $match_there = ['store_id' => $store_id, 'status' => 0];
+        $orders = Order::where($match_there)->get();
         $orders->transform(function($order,$key){
             $order->cart = unserialize($order->cart);
             return $order;
         });
+
 
 //        foreach($orders as $order){
 //            $order->cart = unserialize($order->cart);
