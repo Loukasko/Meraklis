@@ -27,31 +27,25 @@
         #map {
             height: 100%;
         }
-
         /* Optional: Makes the sample page fill the window. */
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
         }
-
         #description {
             font-size: 10px;
             font-weight: 300;
         }
-
         #infowindow-content .title {
             /*font-weight: bold;*/
         }
-
         #infowindow-content {
             display: none;
         }
-
         #map #infowindow-content {
             display: inline;
         }
-
         .pac-card {
             margin: 10px 10px 0 0;
             border-radius: 2px 0 0 2px;
@@ -62,23 +56,19 @@
             background-color: #fff;
             font-family: Roboto;
         }
-
         #pac-container {
             padding-bottom: 12px;
             margin-right: 12px;
         }
-
         .pac-controls {
             display: inline-block;
             padding: 5px 11px;
         }
-
         .pac-controls label {
             font-family: Roboto;
             font-size: 19px;
             font-weight: 300;
         }
-
         #pac-input {
             background-color: #fff;
             font-family: Roboto;
@@ -89,17 +79,34 @@
             text-overflow: ellipsis;
             /*width: 400px;*/
         }
-
         #pac-input:focus {
-            border-color: #4d90fe;
+            border-color: #4d90fe !important;
         }
-
         #title {
             color: #fff;
             background-color: deepskyblue;
             font-size: 15px;
             font-weight: 500;
             padding: 6px 12px;
+        }
+        .navbar {
+            background-color: #43240E !important;
+        }
+        .navbar-brand{
+            color: #F6E0C4 !important;
+        }
+        .nav-item a {
+            color: #F6E0C4 !important;
+            font-size: 1.1em !important;
+        }
+        .dropdown-menu{
+            background-color: #43240E !important;
+        }
+        .dropdown-menu a{
+            background-color: #43240E !important;
+        }
+        .dropdown-menu a:hover{
+            background-color: #553926 !important;
         }
     </style>
 
@@ -115,7 +122,7 @@
     <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                ΜΕΡΑΚΛΗΣ
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"

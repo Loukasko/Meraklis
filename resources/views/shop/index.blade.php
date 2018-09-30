@@ -4,6 +4,26 @@
 
 @endsection
 
+@section('styles')
+    <style>
+
+        body,html{
+            min-height: 100%;
+        }
+        body{
+            background-image:url(http://wallpapersdsc.net/wp-content/uploads/2016/09/Coffee-Beans-Photos.jpeg);
+            background-repeat: no-repeat;
+            /*background-size: 100%;*/
+            background-size: cover;
+        }
+
+        .thumbnail{
+            background-color: #F6E0C4;
+
+        }
+    </style>
+@endsection
+
 @section('content')
     {{-- this will provide us with chunks of items --}}
     <div id="stripe">

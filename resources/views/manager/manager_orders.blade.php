@@ -54,32 +54,24 @@
 @section('scripts')
 
     <script type="text/javascript">
-        console.log("mesa");
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        // $('#checkout').click(function(event){
-        //     console.log("fak");
-        //
-        //     $.get('manager_orders_ajax',{'_token':$('input[name=_token]').val()}, function(data){
-        //         console.log(1);
-        //         console.log(data);
-        //     })
-        // });
-        $(document).on('click', '#checkout', function(){
-            // $this.hide();
-            console.log("fak");
+
+        $(document).on('click', '#checkout', function refreshText(){
             $.get("{{URL::to('manager/manager_orders_ajax')}}", function(){
                 console.log("inout");
             }).done(function(data){
                 var s = "1";
+                document.getElementById("id").innerHTML ="";
                 $.each(data,function(index,subcatObj){
                     if(subcatObj.address == "marker"){
                         subcatObj.address = "Customer Chose address by marker";
                     }
                     console.log(subcatObj.cart.items[0]);
+
                     document.getElementById("id").innerHTML += "<br><br><p>Order : "+subcatObj.id+"<br>Address : "+subcatObj.address+"</p>";
                     for(var i=1; i < 11; i++){
                         if(typeof subcatObj.cart.items[i] !== 'undefined') {
@@ -88,8 +80,10 @@
                         }
                     }
                 });
+                setTimeout(refreshText,5000);
             });
         });
+
     </script>
 
 @endsection

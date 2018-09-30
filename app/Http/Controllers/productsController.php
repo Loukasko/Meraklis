@@ -6,13 +6,26 @@ use App\cart;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Order;
+use DB;
 class productsController extends Controller
 {
     public function getIndex(){
         //use products model to fetch all the products
-        $products = products::all();
-        //product is just a var that we will use in our index.blade
-        return view('shop.index',['product' => $products]);
+        if(Auth::guest()){
+            return redirect()->back()->withErrors(['msg' => 'You have to be signed in to access this page']);
+        }else {
+            $products = products::all();
+            //product is just a var that we will use in our index.blade
+            return view('shop.index', ['product' => $products]);
+        }
+    }
+
+    public function getEmptyCart(Request $request){
+        if (!Session::has('cart')){
+            return view('shop.shopping-cart');
+        }
+        Session::forget('cart');
+        return redirect()->route('shop.index');
     }
     //adding items to the session
     public function  getAddToCart(Request $request, $id){
@@ -23,26 +36,19 @@ class productsController extends Controller
         $request->session()->put('cart', $cart);
         return redirect()->route('shop.index');
     }
-//    public function getCart(){
-//        if (!Session::has('cart')){
-//            return view('shop.shopping-cart');
-//        }
-//        $oldCart = Session::get('cart');
-//        $cart = new Cart($oldCart);
-//        return view('shop.shopping-cart' , ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
-//    }
+
     public function getCart(){
-        if (!Session::has('cart')){
-            return view('shop.shopping-cart');
+        if(Auth::guest()){
+            return redirect()->back()->withErrors(['msg' => 'You have to be signed in to access this page']);
+        } else {
+            if (!Session::has('cart')) {
+                return view('shop.shopping-cart');
+            }
+            $oldCart = Session::get('cart');
+            $cart = new Cart($oldCart);
+
+            return view('shop.shopping-cart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
         }
-        $oldCart = Session::get('cart');
-        $cart = new Cart($oldCart);
-//        $order = new Order();
-//        //take php object convert to string and store in DB
-//        $order->cart = serialize($cart);
-//
-//       Session::forget('cart');
-        return view('shop.shopping-cart' , ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
     public function getCheckout(Request $request){
         if (!Session::has('cart')) {
@@ -60,9 +66,22 @@ class productsController extends Controller
         $order->status = 0;
         //$order->store_id = 1;
         $order->store_id=$user->csid;
+        $store = $user->csid;
 
         //retrieve user using Auth facade
         Auth::user()->orders()->save($order);
+        for( $i = 6; $i <= 10; $i++){
+            if( !empty ($cart->items[$i]) ){
+                $match_these = ['products_id' => $i, 'store_id' => $store];
+                for(  $j = 0; $j < $cart->items[$i]['qty']; $j++){
+                    if ( (DB::table('products_store')->select('stock')->where($match_these)->value('stock')) !== 0 ) {
+
+                        DB::table('products_store')->where($match_these)->decrement('stock', 1);
+                    }
+                }
+            }
+        }
+
         Session::forget('cart');
         //$request->session()->forget('cart');
     }

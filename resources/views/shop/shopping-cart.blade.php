@@ -19,6 +19,28 @@
     {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNvM3cspDODEWniOMkvT4qMxSK4SvZ4-A&libraries=places&callback=initialize" async defer></script>--}}
 
     <style>
+
+        body,html{
+            min-height: 100%;
+        }
+        body:before {
+            content: '';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-image:url(http://wallpapersdsc.net/wp-content/uploads/2016/09/Coffee-Beans-Photos.jpeg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            z-index: -9;
+        }
+
         #map {
             width: 100%;
             height: 650px;
@@ -61,6 +83,67 @@
             margin: auto
         }
 
+        h3 {
+            text-align: center;
+            color : #F6E0C4;
+        }
+        a{
+            text-align: center;
+            color : #F6E0C4;
+        }
+
+        a:hover {
+            color : #F6E0C4;
+        }
+
+        #empty {
+            background-color: #43240E;
+            border-color: #43240E;
+            opacity: 0.8;
+            color: #F6E0C4;
+            filter:(opacity=50);
+            height: 35px;
+            width: 110px;
+            padding: 0;
+            line-height: 30px;
+            text-align: center;
+            margin: auto
+        }
+
+        #empty:hover{
+            background-color: #43240E;
+            opacity: 1;
+        }
+
+        #empty:active {
+            background-color: #43240E;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .list-group-item {
+            background-color: #43240E;
+            border-color: #43240E;
+            opacity: 0.8;
+            filter:(opacity=50);
+        }
+
+        .list-group-item span.badge {
+            background-color: #F6E0C4;
+            color: black;
+        }
+
+        strong {
+            color: #F6E0C4;
+        }
+
+        #center {
+            width: 100%;
+            text-align: center;
+        }
+
+        .hide{
+            display:none;
+        }
 
     </style>
 @endsection
@@ -75,15 +158,6 @@
                         <li class="list-group-item">
                             <span class="badge">{{ $product['qty'] }}</span>
                             <strong>{{ $product['item']['title'] }}</strong>
-                            <span class="label label-success">{{ $product['price'] }}</span>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-xs dropdown-toogle"
-                                        data-toggle="dropdown">Action <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Reduce by 1</a></li>
-                                    <li><a href="#">Reduce All</a></li>
-                                </ul>
-                            </div>
                         </li>
                     @endforeach
                 </ul>
@@ -93,6 +167,9 @@
             <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
                 <strong>Total: {{ $totalPrice }}</strong>
             </div>
+        </div>
+        <div id="center" class="container">
+            <a href="{{ route('shop.emptyCart')}}" id="empty" class="btn btn-primary" role="button">Empty Cart</a>
         </div>
         <hr>
         <div class="row">
@@ -108,7 +185,13 @@
     @else
         <div class="row">
             <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-                <h2>No Items in Cart!</h2>
+                @if(Auth::check())
+                    <h3>No Items in Cart!<br><br>
+                        <a href="{{route('shop.index')}}">Buy Something First</a>
+                    </h3>
+                @else
+                    <h3>Please Login First</h3>
+                @endif
             </div>
         </div>
     @endif
